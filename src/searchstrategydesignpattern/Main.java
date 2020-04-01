@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         
         //Performance measurement
-        final int SIZE = 1_000_000;
+        final int SIZE = 80_000_000;
         List<String> objects = new ArrayList<>();
         System.out.println("Loading strings into list...");
         
@@ -29,13 +29,23 @@ public class Main {
         objects.add(wanted); //add it last to get worst case performance time
         
         System.out.println("Done loading...");
-                
+
+        Collections.sort(objects); //lets sort the list (binary search requires that)    
+        
         //create a new Searcher object with a search strategy of SequentialSearch
         Searcher s = new Searcher(new SequentialSearch());
+                
+        long start = System.nanoTime();
         
-        long start = System.currentTimeMillis();
-        int result = s.executeSearch(objects, wanted);
-        System.out.println("Time elapsed: " + (System.currentTimeMillis()-start) + " ms");        
+        
+        int result = s.executeSearch(objects, wanted);       
+        //int result = Collections.binarySearch(objects, wanted);
+        
+        
+        long stop = System.nanoTime();
+        double elapsedTime = (stop - start) / 1000000.0; //converting from nano to ms
+                
+        System.out.println("Time elapsed: " + elapsedTime + " ms");        
         System.out.println("Search result (Sequential Search): index:" + result + " ("+ objects.get(result) + ")");
         
         //FIXME: change strategy to binary search and re-test
